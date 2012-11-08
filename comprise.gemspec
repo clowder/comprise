@@ -6,7 +6,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["clowder@gmail.com"]
   gem.description   = %q{Comprise brings basic List Comprehension functionality to Ruby.}
   gem.summary       = %q{List Comprehension for Ruby.}
-  gem.homepage      = "https://clowder.github.com/comprise"
+  gem.homepage      = "http://clowder.github.com/comprise"
 
   gem.files         = %w{LICENSE
                          README.md
