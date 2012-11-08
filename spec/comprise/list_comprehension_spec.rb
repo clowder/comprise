@@ -1,6 +1,6 @@
-require File.expand_path('../../lib/listcomp.rb', __FILE__)
+require File.expand_path('../../../lib/comprise', __FILE__)
 
-describe ListComprehension do
+describe Comprise::ListComprehension do
   it "works" do
     listcomp(x: -> { [1,2,3] }, y: -> { [4,5,6] }).to_a.should == [
       [1,4], [1,5], [1,6],
