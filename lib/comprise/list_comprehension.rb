@@ -1,15 +1,13 @@
 module Comprise
   class ListComprehension
     def initialize(lists)
-      vars = lists.values
-      enum = init_enum(vars.shift)
-
-      @context    = Struct.new(*lists.keys)
-      @enumerator = vars.inject(enum) do |enum, var|
-        if var.respond_to? :call
-          enum.flat_map { |other| @context.new(*other).instance_exec(&var).map { |x| other + [x] } }
+      values         = lists.values
+      @context_klass = Struct.new(*lists.keys)
+      @enumerator    = values.inject(init_enumerator(values.shift)) do |enumerator, enum_or_proc|
+        if enum_or_proc.respond_to? :call
+          enumerator.flat_map { |other| new_context(other).instance_exec(&enum_or_proc).map { |x| other + [x] } }
         else
-          enum.flat_map { |other| var.map { |x| other + [x] } }
+          enumerator.flat_map { |other| enum_or_proc.map { |x| other + [x] } }
         end
       end
     end
@@ -19,7 +17,7 @@ module Comprise
     end
 
     def map
-      @enumerator.map { |values| @context.new(*values).instance_exec(&Proc.new) }
+      @enumerator.map { |values| new_context(values).instance_exec(&Proc.new) }
     end
 
     def inspect
@@ -27,10 +25,14 @@ module Comprise
     end
 
     private
-    def init_enum(var)
-      var = var.respond_to?(:call) ? var.call : var
-      var = var.lazy if var.respond_to? :lazy
-      var.map { |x| [x] }
+    def new_context(values)
+      @context_klass.new(*values)
+    end
+
+    def init_enumerator(enum_or_proc)
+      enumerator = enum_or_proc.respond_to?(:call) ? enum_or_proc.call : enum_or_proc
+      enumerator = enumerator.lazy if enumerator.respond_to? :lazy
+      enumerator.map { |x| [x] }
     end
   end
 end
