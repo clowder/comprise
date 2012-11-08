@@ -43,4 +43,9 @@ describe Comprise::ListComprehension do
       [3,1,4], [3,2,5], [3,3,6]
     ]
   end
+
+  it "exposes a little context via #inspect" do
+    comp = listcomp(x: [], y: 0..0, z: ->{ []})
+    comp.inspect.should == "#<Comprise::ListComprehension:#{comp.object_id} generators:[[:x, Array], [:y, Range], [:z, Proc]]>"
+  end
 end
