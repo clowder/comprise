@@ -7,7 +7,7 @@ module Comprise
       @context    = Struct.new(*lists.keys)
       @enumerator = vars.inject(enum) do |enum, var|
         if var.respond_to? :call
-          enum.flat_map { |other| var.call.map { |x| other + [x] } }
+          enum.flat_map { |other| @context.new(*other).instance_exec(&var).map { |x| other + [x] } }
         else
           enum.flat_map { |other| var.map { |x| other + [x] } }
         end
@@ -19,7 +19,7 @@ module Comprise
     end
 
     def map
-      @enumerator.map { |values| @context.new(*values).instance_eval(&Proc.new) }
+      @enumerator.map { |values| @context.new(*values).instance_exec(&Proc.new) }
     end
 
     def inspect

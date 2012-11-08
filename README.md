@@ -41,6 +41,14 @@ listcomp(y: -> { (1..5).map { |i| i * 2 } }, x: 1..2) { x * y }.to_a
 => [2, 4, 4, 8, 6, 12, 8, 16, 10, 20]
 ```
 
+Comprehensions can also be self referential; provided that your using a lambda or a Proc & your
+referencing lists that have already been evaluated.
+
+```ruby
+listcomp(x: 1..3, y: -> { 1..x }, z: -> { [x + y] }).to_a
+# => [[1, 1, 2], [2, 1, 3], [2, 2, 4], [3, 1, 4], [3, 2, 5], [3, 3, 6]]
+```
+
 *Important note: In Ruby 2.0.x Comprise makes use of Lazy emuerators.*
 
 ## Contributing

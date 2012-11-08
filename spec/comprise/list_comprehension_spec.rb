@@ -35,4 +35,12 @@ describe Comprise::ListComprehension do
       end.to_a
     }.not_to raise_error
   end
+
+  it "allow lists to reference earlier lists, requires lambda or Proc (i.e. deferred execution)" do
+    listcomp(x: 1..3, y: -> { 1..x }, z: -> { [x + y] }).to_a.should == [
+      [1,1,2],
+      [2,1,3], [2,2,4],
+      [3,1,4], [3,2,5], [3,3,6]
+    ]
+  end
 end
