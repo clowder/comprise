@@ -49,7 +49,7 @@ listcomp(x: 1..3, y: -> { 1..x }, z: -> { [x + y] }).to_a
 # => [[1, 1, 2], [2, 1, 3], [2, 2, 4], [3, 1, 4], [3, 2, 5], [3, 3, 6]]
 ```
 
-*Important note: In Ruby 2.0.x Comprise makes use of Lazy emuerators.*
+*Important note: In Ruby 2.0.x Comprise makes use of Lazy enumerators.*
 
 ## Contributing
 
