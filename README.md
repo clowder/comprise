@@ -24,7 +24,7 @@ Building a comprehension goes something like:
 
 ```ruby
 comp = Comprise::ListComprehension.new(y: -> { (1..5).map { |i| i * 2 } }, x: 1..2)
-# => #<Comprise::ListComprehension:70101319648040>
+=> #<Comprise::ListComprehension:70240864145320 generators:[[:y, Proc], [:x, Range]]>
 
 comp.to_a
 # => [[2, 1], [2, 2], [4, 1], [4, 2], [6, 1], [6, 2], [8, 1], [8, 2], [10, 1], [10, 2]]
