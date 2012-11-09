@@ -19,4 +19,9 @@ Gem::Specification.new do |gem|
   gem.name          = "comprise"
   gem.require_paths = ["lib"]
   gem.version       = Comprise::VERSION
+
+
+  gem.add_development_dependency 'rspec'
+  gem.add_development_dependency 'guard-rspec'
+  gem.add_development_dependency 'rb-fsevent', '~> 0.9.1'
 end
