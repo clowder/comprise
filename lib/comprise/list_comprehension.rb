@@ -4,13 +4,13 @@ module Comprise
       generators           = lists.values
       @details_for_inspect = lists.keys.zip(generators.map(&:class))
       @context_klass       = Struct.new(*lists.keys)
-      @enumerator          = generators.inject(init_enumerator(generators.shift)) do |enumerator, generator|
+      @enumerator          = generators.inject(init_enumerator(generators.shift)) { |enumerator, generator|
         if generator.respond_to? :call
           enumerator.flat_map { |other| new_context(other).instance_exec(&generator).map { |x| other + [x] } }
         else
           enumerator.flat_map { |other| generator.map { |x| other + [x] } }
         end
-      end
+      }
     end
 
     def to_a
