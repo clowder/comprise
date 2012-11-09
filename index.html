@@ -60,7 +60,7 @@
 <p>Building a comprehension goes something like:</p>
 
 <div class="highlight"><pre><span class="n">comp</span> <span class="o">=</span> <span class="no">Comprise</span><span class="o">::</span><span class="no">ListComprehension</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">y</span><span class="p">:</span> <span class="o">-&gt;</span> <span class="p">{</span> <span class="p">(</span><span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="o">|</span><span class="n">i</span><span class="o">|</span> <span class="n">i</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">}</span> <span class="p">},</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span><span class="o">.</span><span class="n">.</span><span class="mi">2</span><span class="p">)</span>
-<span class="c1"># =&gt; #&lt;Comprise::ListComprehension:70101319648040&gt;</span>
+<span class="o">=&gt;</span> <span class="c1">#&lt;Comprise::ListComprehension:70240864145320 generators:[[:y, Proc], [:x, Range]]&gt;</span>
 
 <span class="n">comp</span><span class="o">.</span><span class="n">to_a</span>
 <span class="c1"># =&gt; [[2, 1], [2, 2], [4, 1], [4, 2], [6, 1], [6, 2], [8, 1], [8, 2], [10, 1], [10, 2]]</span>
