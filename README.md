@@ -23,7 +23,7 @@ Or install it yourself as:
 Building a comprehension goes something like:
 
 ```ruby
-comp = Comprise::ListComprehension.new(y: ->{ (1..5).map { |i| i * 2 } }, x: 1..2)
+comp = Comprise::ListComprehension.new(y: ->{ (1..5).map { |i| i * 2 } }, x: ->{ 1..2 })
 => #<Comprise::ListComprehension:70240864145320 generators:[[:y, Proc], [:x, Range]]>
 
 comp.to_a
@@ -37,7 +37,7 @@ Comprise also adds the Kernel method `listcomp`, so all that could be done more 
 one-liner:
 
 ```ruby
-listcomp(y: ->{ (1..5).map { |i| i * 2 } }, x: 1..2) { x * y }.to_a
+listcomp(y: ->{ (1..5).map { |i| i * 2 } }, x: ->{ 1..2 }) { x * y }.to_a
 => [2, 4, 4, 8, 6, 12, 8, 16, 10, 20]
 ```
 
@@ -45,15 +45,15 @@ Comprehensions can also be self referential; provided that your using a lambda o
 referencing lists that have already been evaluated.
 
 ```ruby
-listcomp(x: 1..3, y: ->{ 1..x }, z: ->{ [x + y] }).to_a
+listcomp(x: ->{ 1..3 }, y: ->{ 1..x }, z: ->{ [x + y] }).to_a
 # => [[1, 1, 2], [2, 1, 3], [2, 2, 4], [3, 1, 4], [3, 2, 5], [3, 3, 6]]
 ```
 
 Another exmaple; for good measure. Factoring primes:
 
 ```ruby
-is_prime     = ->(num) { !listcomp(divisor: 2..(num**0.5).to_i, is_factor: ->{ [num % divisor == 0] }) { is_factor }.any? }
-search_space = 2..100
+is_prime     = ->(num) { !listcomp(divisor: ->{ 2..(num**0.5).to_i }, is_factor: ->{ [num % divisor == 0] }) { is_factor }.any? }
+search_space = ->{ 2..100 }
 listcomp(x: search_space, test: ->{ is_prime[x] ? [x] : [] }) { x }.take(10).to_a # If this is slow reduce the search space
 # => [2, 3, 5, 7, 11, 13, 17, 19, 23, 29]
 ```
