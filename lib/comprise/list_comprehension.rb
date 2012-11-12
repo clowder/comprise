@@ -3,8 +3,12 @@ module Comprise
     def initialize(lists)
       generators           = lists.values
       @context_klass       = Struct.new(*lists.keys)
-      @enumerator          = generators.inject(init_enumerator(generators.shift)) { |enumerator, generator|
-        enumerator.flat_map { |other| new_context(other).instance_exec(&generator).map { |x| other + [x] } }
+      @enumerator          = generators.inject(init_enumerator(generators.shift)) { |enumerator, (generator,*guards)|
+        enumerator.flat_map { |other|
+          new_context(other).instance_exec(&generator).reject { |x|
+            guards.any? { |guard| !new_context(other + [x]).instance_exec(&guard) }
+          }.map { |x| other + [x] }
+        }
       }
     end
 
@@ -26,8 +30,14 @@ module Comprise
     end
 
     def init_enumerator(generator)
+      generator, *guards = generator
+
       enumerator = generator.call
       enumerator = enumerator.lazy if enumerator.respond_to? :lazy
+      enumerator = enumerator.reject { |x|
+        guards.any? { |guard| !new_context([x]).instance_exec(&guard) }
+      }
+
       enumerator.map { |x| [x] }
     end
   end

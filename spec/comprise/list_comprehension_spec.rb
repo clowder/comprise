@@ -1,4 +1,5 @@
 require File.expand_path('../../../lib/comprise', __FILE__)
+require 'ostruct'
 
 describe Comprise::ListComprehension do
   it "works" do
@@ -28,5 +29,19 @@ describe Comprise::ListComprehension do
   it "exposes a little context via #inspect" do
     comp = listcomp(x: -> { [] }, y: ->{ 0..0 }, z: ->{ [] })
     comp.inspect.should == "#<Comprise::ListComprehension:#{comp.object_id} generators:[:x, :y, :z]>"
+  end
+
+  it "allows you to specify a predicate for the input set" do
+    owners = ->{ [OpenStruct.new(name: 'Chris', car_name: 'Hilux'),
+                  OpenStruct.new(name: 'Lucy',  car_name: 'Mini')] }
+    cars   = ->{ [OpenStruct.new(name: 'Hilux', manufacture_date: 2008),
+                  OpenStruct.new(name: 'Mini',  manufacture_date: 2012) ] }
+
+    car_list = listcomp(owner: owners,
+                        car:   [cars, ->{ owner.car_name == car.name }]) {
+      "#{ owner.name } drives a #{ car.manufacture_date } #{ car.name }"
+    }
+
+    car_list.should == ["Chris drives a 2008 Hilux", "Lucy drives a 2012 Mini"]
   end
 end
